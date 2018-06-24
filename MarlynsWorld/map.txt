@@ -1,3 +1,10 @@
+4
+grass -
+updown NS
+leftright EW
+cross NESW
+1
+marlyn_south 2 2
 5 5
 grass		grass		updown	grass 		grass
 grass		grass		updown	grass 		grass

@@ -40,17 +40,39 @@ namespace marlyn
 	class tile
 	{
 	public:
-		tile( std::string inImageName, map * inParent ) : mImageName(inImageName), mParent(inParent) {}
+		tile( std::string inImageName, neighboring_tile exits, map * inParent ) : mImageName(inImageName), mExits(exits), mParent(inParent) {}
 		
 		std::string image_name() 		{ return mImageName; }
-		
+		neighboring_tile exits() 		{ return mExits; }
+
 		bool is_seen() 					{ return mIsSeen; }
 		void set_seen( bool isSeen );
 		
 	protected:
-		std::string mImageName;
-		bool mIsSeen = false;
-		map * mParent;
+		std::string			mImageName;
+		bool				mIsSeen = false;
+		neighboring_tile	mExits;
+		map				*	mParent;
+	};
+	
+	
+	class actor
+	{
+	public:
+		actor( std::string inImageName, map * inParent ) : mImageName(inImageName), mParent(inParent) {}
+		
+		std::string image_name() 		{ return mImageName; }
+
+		size_t		x_pos()	{ return mXPos; }
+		void		set_x_pos( size_t n );
+		size_t		y_pos()	{ return mYPos; }
+		void		set_y_pos( size_t n );
+
+	protected:
+		std::string			mImageName;
+		size_t  			mXPos = 0;
+		size_t				mYPos = 0;
+		map				*	mParent;
 	};
 	
 	
@@ -65,19 +87,27 @@ namespace marlyn
 		
 		tile * 	tile_at( size_t x, size_t y )	{ return mTiles[y][x]; }
 		void	index_of_tile( tile * inTile, size_t * outX, size_t * outY );
-		void	neighbors_at( size_t x, size_t y, std::function<void(tile*,neighboring_tile)> visitor);
+		void	neighbors_at( size_t x, size_t y, std::function<void(tile *, neighboring_tile)> visitor);
 		neighboring_tile	seen_neighbor_flags_at( size_t x, size_t y );
+		
+		actor * player()	{ return mPlayer; }
 
 		void set_tile_changed_handler( std::function<void(tile *)> inHandler ) { mTileChangedHandler = inHandler; }
 		void tile_changed( tile * inTile ) 		{ if( mTileChangedHandler ) mTileChangedHandler(inTile); };
-		
+
+		void set_actor_changed_handler( std::function<void(actor *)> inHandler ) { mActorChangedHandler = inHandler; }
+		void actor_changed( actor * inActor ) 		{ if( mActorChangedHandler ) mActorChangedHandler(inActor); };
+
 	protected:
 		size_t mWidth;
 		size_t mHeight;
 		
 		std::vector<std::vector<tile *>> mTiles;
 		
+		actor * mPlayer;
+		
 		std::function<void(tile *)> mTileChangedHandler;
+		std::function<void(actor *)> mActorChangedHandler;
 	};
 	
 	

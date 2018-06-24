@@ -8,9 +8,24 @@
 
 #include "marlyn_map.hpp"
 #include <fstream>
+#include <map>
 
 
 using namespace marlyn;
+
+
+void	actor::set_x_pos( size_t n )
+{
+	mXPos = n;
+	mParent->actor_changed(this);
+}
+
+
+void	actor::set_y_pos( size_t n )
+{
+	mYPos = n;
+	mParent->actor_changed(this);
+}
 
 
 void	tile::set_seen( bool isSeen )
@@ -36,6 +51,53 @@ map::map( const char* inFilePath )
 {
 	std::fstream theFile( inFilePath, std::ios_base::in );
 	
+	std::map<std::string, neighboring_tile> tileExits;
+	
+	size_t numTileInfos;
+	theFile >> numTileInfos;
+	for( size_t x = 0; x < numTileInfos; ++x )
+	{
+		std::string tilename;
+		std::string tileInfos;
+		
+		theFile >> tilename;
+		theFile >> tileInfos;
+		
+		neighboring_tile flags = none;
+		if( tileInfos.find("N") != std::string::npos )
+		{
+			flags |= north;
+		}
+		if( tileInfos.find("E") != std::string::npos )
+		{
+			flags |= east;
+		}
+		if( tileInfos.find("S") != std::string::npos )
+		{
+			flags |= south;
+		}
+		if( tileInfos.find("W") != std::string::npos )
+		{
+			flags |= west;
+		}
+		tileExits[tilename] = flags;
+	}
+	
+	size_t numActors;
+	theFile >> numActors;
+	assert(numActors == 1);
+	
+	std::string actorName;
+	theFile >> actorName;
+	
+	size_t actorX, actorY;
+	theFile >> actorX;
+	theFile >> actorY;
+
+	mPlayer = new actor( actorName, this );
+	mPlayer->set_x_pos(actorX);
+	mPlayer->set_y_pos(actorY);
+	
 	theFile >> mWidth;
 	theFile >> mHeight;
 	
@@ -48,7 +110,8 @@ map::map( const char* inFilePath )
 			std::string imageName;
 			theFile >> imageName;
 			
-			row.push_back( new tile(imageName, this) );
+			tile * newTile = new tile(imageName, tileExits[imageName], this);
+			row.push_back( newTile );
 		}
 		mTiles.push_back(row);
 	}

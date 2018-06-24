@@ -12,8 +12,6 @@
 @interface MLWMapView ()
 {
 	CALayer * _playerLayer;
-	size_t playerX;
-	size_t playerY;
 }
 
 @end
@@ -45,12 +43,9 @@
 		box.origin.y += box.size.height;
 	}
 	
-	box.origin.x = 48.0 * playerX;
-	box.origin.y = 48.0 * playerY;
-
 	_playerLayer = [CALayer layer];
-	_playerLayer.contents = [NSImage imageNamed: @"marlyn_south"];
-	_playerLayer.frame = box;
+	_playerLayer.contents = [NSImage imageNamed: [NSString stringWithUTF8String:_map->player()->image_name().c_str()]];
+	_playerLayer.frame = NSZeroRect;
 	[self.layer addSublayer:_playerLayer];
 
 	__weak typeof(self) weakSelf = self;
@@ -86,11 +81,20 @@
 			}
 		}
 	});
+	_map->set_actor_changed_handler( ^( marlyn::actor * inActor )
+	{
+		typeof(self) strongSelf = weakSelf;
+		if( strongSelf )
+		{
+			strongSelf->_playerLayer.frame = (NSRect){ { 48.0 * inActor->x_pos(),  48.0 * inActor->y_pos() }, { 48.0, 48.0 } };
+			strongSelf->_map->tile_at( inActor->x_pos(), inActor->y_pos() )->set_seen( true );
+		}
+	});
 	
 	[self.widthAnchor constraintEqualToConstant:_map->width() * 48.0].active = YES;
 	[self.heightAnchor constraintEqualToConstant:_map->height() * 48.0].active = YES;
 	
-	_map->tile_at( playerX, playerY )->set_seen( true );
+	_map->actor_changed( _map->player() );
 }
 
 
@@ -110,38 +114,30 @@
 {
 	if( selector == @selector(moveUp:) )
 	{
-		if( playerY < (_map->height() - 1) )
+		if( _map->player()->y_pos() < (_map->height() - 1) )
 		{
-			playerY += 1;
-			_playerLayer.frame = (NSRect){ { 48.0 * playerX,  48.0 * playerY }, { 48.0, 48.0 } };
-			_map->tile_at( playerX, playerY )->set_seen( true );
+			_map->player()->set_y_pos( _map->player()->y_pos() + 1 );
 		}
 	}
 	else if( selector == @selector(moveDown:) )
 	{
-		if( playerY > 0 )
+		if( _map->player()->y_pos() > 0 )
 		{
-			playerY -= 1;
-			_playerLayer.frame = (NSRect){ { 48.0 * playerX,  48.0 * playerY }, { 48.0, 48.0 } };
-			_map->tile_at( playerX, playerY )->set_seen( true );
+			_map->player()->set_y_pos( _map->player()->y_pos() - 1 );
 		}
 	}
 	else if( selector == @selector(moveRight:) )
 	{
-		if( playerX < (_map->width() - 1) )
+		if( _map->player()->x_pos() < (_map->width() - 1) )
 		{
-			playerX += 1;
-			_playerLayer.frame = (NSRect){ { 48.0 * playerX,  48.0 * playerY }, { 48.0, 48.0 } };
-			_map->tile_at( playerX, playerY )->set_seen( true );
+			_map->player()->set_x_pos( _map->player()->x_pos() + 1 );
 		}
 	}
 	else if( selector == @selector(moveLeft:) )
 	{
-		if( playerX > 0 )
+		if( _map->player()->x_pos() > 0 )
 		{
-			playerX -= 1;
-			_playerLayer.frame = (NSRect){ { 48.0 * playerX,  48.0 * playerY }, { 48.0, 48.0 } };
-			_map->tile_at( playerX, playerY )->set_seen( true );
+			_map->player()->set_x_pos( _map->player()->x_pos() - 1 );
 		}
 	}
 }
