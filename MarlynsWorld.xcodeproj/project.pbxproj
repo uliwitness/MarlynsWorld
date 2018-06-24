@@ -7,21 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5565CF4420E01A23007A9A0B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5565CF4320E01A23007A9A0B /* AppDelegate.m */; };
+		5565CF4420E01A23007A9A0B /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5565CF4320E01A23007A9A0B /* AppDelegate.mm */; };
 		5565CF4620E01A2A007A9A0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5565CF4520E01A2A007A9A0B /* Assets.xcassets */; };
 		5565CF4920E01A2A007A9A0B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5565CF4720E01A2A007A9A0B /* MainMenu.xib */; };
 		5565CF4C20E01A2A007A9A0B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5565CF4B20E01A2A007A9A0B /* main.m */; };
+		5565CF5520E01A84007A9A0B /* MLWMapView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5565CF5420E01A84007A9A0B /* MLWMapView.mm */; };
+		5565CF5820E01B25007A9A0B /* marlyn_map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5565CF5620E01B25007A9A0B /* marlyn_map.cpp */; };
+		5565CF5A20E01F80007A9A0B /* map.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5565CF5920E01F80007A9A0B /* map.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5565CF3F20E01A23007A9A0B /* MarlynsWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarlynsWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5565CF4220E01A23007A9A0B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		5565CF4320E01A23007A9A0B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		5565CF4320E01A23007A9A0B /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		5565CF4520E01A2A007A9A0B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5565CF4820E01A2A007A9A0B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		5565CF4A20E01A2A007A9A0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5565CF4B20E01A2A007A9A0B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5565CF4D20E01A2A007A9A0B /* MarlynsWorld.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MarlynsWorld.entitlements; sourceTree = "<group>"; };
+		5565CF5320E01A84007A9A0B /* MLWMapView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MLWMapView.h; sourceTree = "<group>"; };
+		5565CF5420E01A84007A9A0B /* MLWMapView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MLWMapView.mm; sourceTree = "<group>"; };
+		5565CF5620E01B25007A9A0B /* marlyn_map.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = marlyn_map.cpp; sourceTree = "<group>"; };
+		5565CF5720E01B25007A9A0B /* marlyn_map.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = marlyn_map.hpp; sourceTree = "<group>"; };
+		5565CF5920E01F80007A9A0B /* map.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = map.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,12 +63,17 @@
 			isa = PBXGroup;
 			children = (
 				5565CF4220E01A23007A9A0B /* AppDelegate.h */,
-				5565CF4320E01A23007A9A0B /* AppDelegate.m */,
+				5565CF4320E01A23007A9A0B /* AppDelegate.mm */,
+				5565CF5320E01A84007A9A0B /* MLWMapView.h */,
+				5565CF5420E01A84007A9A0B /* MLWMapView.mm */,
+				5565CF5720E01B25007A9A0B /* marlyn_map.hpp */,
+				5565CF5620E01B25007A9A0B /* marlyn_map.cpp */,
 				5565CF4520E01A2A007A9A0B /* Assets.xcassets */,
 				5565CF4720E01A2A007A9A0B /* MainMenu.xib */,
 				5565CF4A20E01A2A007A9A0B /* Info.plist */,
 				5565CF4B20E01A2A007A9A0B /* main.m */,
 				5565CF4D20E01A2A007A9A0B /* MarlynsWorld.entitlements */,
+				5565CF5920E01F80007A9A0B /* map.txt */,
 			);
 			path = MarlynsWorld;
 			sourceTree = "<group>";
@@ -122,6 +135,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5565CF5A20E01F80007A9A0B /* map.txt in Resources */,
 				5565CF4620E01A2A007A9A0B /* Assets.xcassets in Resources */,
 				5565CF4920E01A2A007A9A0B /* MainMenu.xib in Resources */,
 			);
@@ -135,7 +149,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5565CF4C20E01A2A007A9A0B /* main.m in Sources */,
-				5565CF4420E01A23007A9A0B /* AppDelegate.m in Sources */,
+				5565CF5520E01A84007A9A0B /* MLWMapView.mm in Sources */,
+				5565CF4420E01A23007A9A0B /* AppDelegate.mm in Sources */,
+				5565CF5820E01B25007A9A0B /* marlyn_map.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

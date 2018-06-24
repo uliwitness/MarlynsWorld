@@ -1,0 +1,6 @@
+5 5
+grass		grass		updown	grass 		grass
+grass		grass		updown	grass 		grass
+leftright	leftright	cross	leftright	leftright
+grass		grass		updown	grass 		grass
+grass		grass		updown	grass 		grass
