@@ -205,33 +205,68 @@ void	map::neighbors_at( size_t x, size_t y, std::function<void(tile*,neighboring
 
 void	map::move_actor_in_direction( actor * inActor, neighboring_tile inDirection )
 {
+	tile * actorTile = tile_at( inActor->x_pos(), inActor->y_pos() );
+	if( (actorTile->exits() & inDirection) == 0 )
+	{
+		return;	// Can't walk that way.
+	}
+	
+	size_t newX = inActor->x_pos(), newY = inActor->y_pos();
+	
 	if( inDirection & north )
 	{
-		if( inActor->y_pos() < (mHeight - 1) )
+		if( newY < (mHeight - 1) )
 		{
-			inActor->set_y_pos( inActor->y_pos() + 1 );
+			newY += 1;
 		}
 	}
 	else if( inDirection & south )
 	{
-		if( inActor->y_pos() > 0 )
+		if( newY > 0 )
 		{
-			inActor->set_y_pos( inActor->y_pos() - 1 );
+			newY -= 1;
 		}
 	}
 	if( inDirection & east )
 	{
-		if( inActor->x_pos() < (mWidth - 1) )
+		if( newX < (mWidth - 1) )
 		{
-			inActor->set_x_pos( inActor->x_pos() + 1 );
+			newX += 1;
 		}
 	}
 	else if( inDirection & west )
 	{
-		if( inActor->x_pos() > 0 )
+		if( newX > 0 )
 		{
-			inActor->set_x_pos( inActor->x_pos() - 1 );
+			newX -= 1;
 		}
 	}
 
+	tile * newActorTile = tile_at( newX, newY );
+	if( actorTile != newActorTile )
+	{
+		// Check if destination tile has a matching exit:
+		//	Handy for implementing doors, no matter what side you're coming from,
+		//	only the door has to block things, not the tile next to it.
+		
+		if( (inDirection & north) && (newActorTile->exits() & south) == 0 )
+		{
+			return;
+		}
+		if( (inDirection & south) && (newActorTile->exits() & north) == 0 )
+		{
+			return;
+		}
+		if( (inDirection & east) && (newActorTile->exits() & west) == 0 )
+		{
+			return;
+		}
+		if( (inDirection & west) && (newActorTile->exits() & east) == 0 )
+		{
+			return;
+		}
+
+		inActor->set_x_pos( newX );
+		inActor->set_y_pos( newY );
+	}
 }
