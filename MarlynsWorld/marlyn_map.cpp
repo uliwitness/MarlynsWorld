@@ -201,3 +201,37 @@ void	map::neighbors_at( size_t x, size_t y, std::function<void(tile*,neighboring
 		visitor(mTiles[y + 1][x - 1], south_west);
 	}
 }
+
+
+void	map::move_actor_in_direction( actor * inActor, neighboring_tile inDirection )
+{
+	if( inDirection & north )
+	{
+		if( inActor->y_pos() < (mHeight - 1) )
+		{
+			inActor->set_y_pos( inActor->y_pos() + 1 );
+		}
+	}
+	else if( inDirection & south )
+	{
+		if( inActor->y_pos() > 0 )
+		{
+			inActor->set_y_pos( inActor->y_pos() - 1 );
+		}
+	}
+	if( inDirection & east )
+	{
+		if( inActor->x_pos() < (mWidth - 1) )
+		{
+			inActor->set_x_pos( inActor->x_pos() + 1 );
+		}
+	}
+	else if( inDirection & west )
+	{
+		if( inActor->x_pos() > 0 )
+		{
+			inActor->set_x_pos( inActor->x_pos() - 1 );
+		}
+	}
+
+}

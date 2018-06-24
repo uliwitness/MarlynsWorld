@@ -91,6 +91,7 @@ namespace marlyn
 		neighboring_tile	seen_neighbor_flags_at( size_t x, size_t y );
 		
 		actor * player()	{ return mPlayer; }
+		void	move_actor_in_direction( actor * inActor, neighboring_tile inDirection );
 
 		void set_tile_changed_handler( std::function<void(tile *)> inHandler ) { mTileChangedHandler = inHandler; }
 		void tile_changed( tile * inTile ) 		{ if( mTileChangedHandler ) mTileChangedHandler(inTile); };

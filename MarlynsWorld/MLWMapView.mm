@@ -114,31 +114,19 @@
 {
 	if( selector == @selector(moveUp:) )
 	{
-		if( _map->player()->y_pos() < (_map->height() - 1) )
-		{
-			_map->player()->set_y_pos( _map->player()->y_pos() + 1 );
-		}
+		_map->move_actor_in_direction(_map->player(), marlyn::north);
 	}
 	else if( selector == @selector(moveDown:) )
 	{
-		if( _map->player()->y_pos() > 0 )
-		{
-			_map->player()->set_y_pos( _map->player()->y_pos() - 1 );
-		}
+		_map->move_actor_in_direction(_map->player(), marlyn::south);
 	}
 	else if( selector == @selector(moveRight:) )
 	{
-		if( _map->player()->x_pos() < (_map->width() - 1) )
-		{
-			_map->player()->set_x_pos( _map->player()->x_pos() + 1 );
-		}
+		_map->move_actor_in_direction(_map->player(), marlyn::east);
 	}
 	else if( selector == @selector(moveLeft:) )
 	{
-		if( _map->player()->x_pos() > 0 )
-		{
-			_map->player()->set_x_pos( _map->player()->x_pos() - 1 );
-		}
+		_map->move_actor_in_direction(_map->player(), marlyn::west);
 	}
 }
 
