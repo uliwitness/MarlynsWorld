@@ -1,13 +1,21 @@
-4
+12
 grass -
 updown NS
 leftright EW
 cross NESW
+leftdown SW
+leftrightdown ESW
+leftrightup NEW
+leftup NW
+leftupdown NSW
+rightdown ES
+rightup NE
+rightupdown NES
 1
 marlyn_south 2 2
 5 5
-grass		grass		updown	grass 		grass
-grass		grass		updown	grass 		grass
-leftright	leftright	cross	leftright	leftright
-grass		grass		updown	grass 		grass
-grass		grass		updown	grass 		grass
+rightdown	leftright	leftrightdown	leftright 	leftdown
+updown		grass		updown			grass 		updown
+rightupdown	leftright	cross			leftright	leftupdown
+updown		grass		updown			grass 		updown
+rightup		leftright	leftrightup		leftright	leftup

@@ -213,14 +213,14 @@ void	map::move_actor_in_direction( actor * inActor, neighboring_tile inDirection
 	
 	size_t newX = inActor->x_pos(), newY = inActor->y_pos();
 	
-	if( inDirection & north )
+	if( inDirection & south )
 	{
 		if( newY < (mHeight - 1) )
 		{
 			newY += 1;
 		}
 	}
-	else if( inDirection & south )
+	else if( inDirection & north )
 	{
 		if( newY > 0 )
 		{
