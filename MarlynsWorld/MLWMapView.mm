@@ -182,49 +182,46 @@
 			NSGradient * falloffGradient = [[NSGradient alloc] initWithColors: @[NSColor.blackColor, NSColor.clearColor]];
 			[falloffGradient drawFromCenter: NSMakePoint(NSMidX(gradientCenterRect), NSMidY(gradientCenterRect)) radius: 10.0 toCenter: NSMakePoint(NSMidX(gradientCenterRect), NSMidY(gradientCenterRect)) radius: (48.0 / 2.0) options: NSGradientDrawsBeforeStartingLocation];
 			
-			strongSelf->_map->neighbors_at( x, y, ^( marlyn::tile* inTile, marlyn::neighboring_tile pos )
-										   {
-											   if (pos & marlyn::south && inTile->is_seen())
-											   {
-												   NSRect southRect = NSOffsetRect(gradientCenterRect, 0, -(48.0 / 2.0));
-												   [falloffGradient drawFromCenter: NSMakePoint(NSMidX(southRect), NSMidY(southRect)) radius: 10.0 toCenter: NSMakePoint(NSMidX(southRect), NSMidY(southRect)) radius: (48.0 / 1.9) options: NSGradientDrawsBeforeStartingLocation];
-											   }
-											   else if (pos & marlyn::south_east && inTile->is_seen())
-											   {
-												   NSRect southEastRect = NSOffsetRect(gradientCenterRect, +(48.0 / 2.0), -(48.0 / 2.0));
-												   [falloffGradient drawFromCenter: NSMakePoint(NSMidX(southEastRect), NSMidY(southEastRect)) radius: 10.0 toCenter: NSMakePoint(NSMidX(southEastRect), NSMidY(southEastRect)) radius: (48.0 / 1.9) options: NSGradientDrawsBeforeStartingLocation];
-											   }
-											   else if (pos & marlyn::east && inTile->is_seen())
-											   {
-												   NSRect southEastRect = NSOffsetRect(gradientCenterRect, +(48.0 / 2.0), 0);
-												   [falloffGradient drawFromCenter: NSMakePoint(NSMidX(southEastRect), NSMidY(southEastRect)) radius: 10.0 toCenter: NSMakePoint(NSMidX(southEastRect), NSMidY(southEastRect)) radius: (48.0 / 1.9) options: NSGradientDrawsBeforeStartingLocation];
-											   }
-											   else if (pos & marlyn::north_east && inTile->is_seen())
-											   {
-												   NSRect northEastRect = NSOffsetRect(gradientCenterRect, +(48.0 / 2.0), +(48.0 / 2.0));
-												   [falloffGradient drawFromCenter: NSMakePoint(NSMidX(northEastRect), NSMidY(northEastRect)) radius: 10.0 toCenter: NSMakePoint(NSMidX(northEastRect), NSMidY(northEastRect)) radius: (48.0 / 1.9) options: NSGradientDrawsBeforeStartingLocation];
-											   }
-											   else if (pos & marlyn::north && inTile->is_seen())
-											   {
-												   NSRect northRect = NSOffsetRect(gradientCenterRect, 0, +(48.0 / 2.0));
-												   [falloffGradient drawFromCenter: NSMakePoint(NSMidX(northRect), NSMidY(northRect)) radius: 10.0 toCenter: NSMakePoint(NSMidX(northRect), NSMidY(northRect)) radius: (48.0 / 1.9) options: NSGradientDrawsBeforeStartingLocation];
-											   }
-											   else if (pos & marlyn::north_west && inTile->is_seen())
-											   {
-												   NSRect northWestRect = NSOffsetRect(gradientCenterRect, -(48.0 / 2.0), +(48.0 / 2.0));
-												   [falloffGradient drawFromCenter: NSMakePoint(NSMidX(northWestRect), NSMidY(northWestRect)) radius: 10.0 toCenter: NSMakePoint(NSMidX(northWestRect), NSMidY(northWestRect)) radius: (48.0 / 1.9) options: NSGradientDrawsBeforeStartingLocation];
-											   }
-											   else if (pos & marlyn::west && inTile->is_seen())
-											   {
-												   NSRect westRect = NSOffsetRect(gradientCenterRect, -(48.0 / 2.0), 0);
-												   [falloffGradient drawFromCenter: NSMakePoint(NSMidX(westRect), NSMidY(westRect)) radius: 10.0 toCenter: NSMakePoint(NSMidX(westRect), NSMidY(westRect)) radius: (48.0 / 1.9) options: NSGradientDrawsBeforeStartingLocation];
-											   }
-											   else if (pos & marlyn::south_west && inTile->is_seen())
-											   {
-												   NSRect southWestRect = NSOffsetRect(gradientCenterRect, -(48.0 / 2.0), -(48.0 / 2.0));
-												   [falloffGradient drawFromCenter: NSMakePoint(NSMidX(southWestRect), NSMidY(southWestRect)) radius: 10.0 toCenter: NSMakePoint(NSMidX(southWestRect), NSMidY(southWestRect)) radius: (48.0 / 1.9) options: NSGradientDrawsBeforeStartingLocation];
-											   }
-										   });
+			if( flags & marlyn::south )
+			{
+				NSRect southRect = NSOffsetRect(gradientCenterRect, 0, -(48.0 / 2.0));
+				[falloffGradient drawFromCenter: NSMakePoint(NSMidX(southRect), NSMidY(southRect)) radius: 10.0 toCenter: NSMakePoint(NSMidX(southRect), NSMidY(southRect)) radius: (48.0 / 1.9) options: NSGradientDrawsBeforeStartingLocation];
+			}
+			if( (flags & marlyn::south_east) || ((flags & marlyn::south) && (flags & marlyn::east)) )
+			{
+				NSRect southEastRect = NSOffsetRect(gradientCenterRect, +(48.0 / 2.0), -(48.0 / 2.0));
+				[falloffGradient drawFromCenter: NSMakePoint(NSMidX(southEastRect), NSMidY(southEastRect)) radius: 10.0 toCenter: NSMakePoint(NSMidX(southEastRect), NSMidY(southEastRect)) radius: (48.0 / 1.9) options: NSGradientDrawsBeforeStartingLocation];
+			}
+			if( flags & marlyn::east )
+			{
+				NSRect southEastRect = NSOffsetRect(gradientCenterRect, +(48.0 / 2.0), 0);
+				[falloffGradient drawFromCenter: NSMakePoint(NSMidX(southEastRect), NSMidY(southEastRect)) radius: 10.0 toCenter: NSMakePoint(NSMidX(southEastRect), NSMidY(southEastRect)) radius: (48.0 / 1.9) options: NSGradientDrawsBeforeStartingLocation];
+			}
+			if( (flags & marlyn::north_east) || ((flags & marlyn::north) && (flags & marlyn::east)) )
+			{
+				NSRect northEastRect = NSOffsetRect(gradientCenterRect, +(48.0 / 2.0), +(48.0 / 2.0));
+				[falloffGradient drawFromCenter: NSMakePoint(NSMidX(northEastRect), NSMidY(northEastRect)) radius: 10.0 toCenter: NSMakePoint(NSMidX(northEastRect), NSMidY(northEastRect)) radius: (48.0 / 1.9) options: NSGradientDrawsBeforeStartingLocation];
+			}
+			if( flags & marlyn::north )
+			{
+				NSRect northRect = NSOffsetRect(gradientCenterRect, 0, +(48.0 / 2.0));
+				[falloffGradient drawFromCenter: NSMakePoint(NSMidX(northRect), NSMidY(northRect)) radius: 10.0 toCenter: NSMakePoint(NSMidX(northRect), NSMidY(northRect)) radius: (48.0 / 1.9) options: NSGradientDrawsBeforeStartingLocation];
+			}
+			if( (flags & marlyn::north_west) || ((flags & marlyn::north) && (flags & marlyn::west)) )
+			{
+				NSRect northWestRect = NSOffsetRect(gradientCenterRect, -(48.0 / 2.0), +(48.0 / 2.0));
+				[falloffGradient drawFromCenter: NSMakePoint(NSMidX(northWestRect), NSMidY(northWestRect)) radius: 10.0 toCenter: NSMakePoint(NSMidX(northWestRect), NSMidY(northWestRect)) radius: (48.0 / 1.9) options: NSGradientDrawsBeforeStartingLocation];
+			}
+			if( flags & marlyn::west )
+			{
+				NSRect westRect = NSOffsetRect(gradientCenterRect, -(48.0 / 2.0), 0);
+				[falloffGradient drawFromCenter: NSMakePoint(NSMidX(westRect), NSMidY(westRect)) radius: 10.0 toCenter: NSMakePoint(NSMidX(westRect), NSMidY(westRect)) radius: (48.0 / 1.9) options: NSGradientDrawsBeforeStartingLocation];
+			}
+			if( (flags & marlyn::south_west) || ((flags & marlyn::south) && (flags & marlyn::west)) )
+			{
+				NSRect southWestRect = NSOffsetRect(gradientCenterRect, -(48.0 / 2.0), -(48.0 / 2.0));
+				[falloffGradient drawFromCenter: NSMakePoint(NSMidX(southWestRect), NSMidY(southWestRect)) radius: 10.0 toCenter: NSMakePoint(NSMidX(southWestRect), NSMidY(southWestRect)) radius: (48.0 / 1.9) options: NSGradientDrawsBeforeStartingLocation];
+			}
 		}
 		return YES;
 	}];
