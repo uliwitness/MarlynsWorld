@@ -26,13 +26,13 @@
 {
 	_map = map;
 	
-	NSRect	box = { { 0, _map->height() * 48.0 }, { 48.0, 48.0 } };
+	NSRect	box = { { 0, _map->height() * 48.0 }, { 49.0, 49.0 } };
 	
 	self.layer.backgroundColor = NSColor.lightGrayColor.CGColor;
 
 	for( size_t y = 0; y < _map->height(); ++y )
 	{
-		box.origin.y -= box.size.height;
+		box.origin.y -= 48.0;
 		box.origin.x = 0;
 
 		for( size_t x = 0; x < _map->width(); ++x )
@@ -40,6 +40,7 @@
 			CALayer *theLayer = [CALayer layer];
 			theLayer.opaque = NO;
 			theLayer.frame = box;
+			theLayer.allowsEdgeAntialiasing = NO;
 #if THIN_FOG_OF_WAR
 			marlyn::tile * currTile = _map->tile_at( x, y );
 			theLayer.contents = [NSImage imageNamed: [NSString stringWithUTF8String: currTile->image_name().c_str()]];
@@ -47,7 +48,7 @@
 #endif
 			[self.layer addSublayer:theLayer];
 			
-			box.origin.x += box.size.width;
+			box.origin.x += 48.0;
 		}
 	}
 	
