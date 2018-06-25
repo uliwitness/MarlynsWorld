@@ -88,6 +88,7 @@ namespace marlyn
 		tile * 	tile_at( size_t x, size_t y )	{ return mTiles[y][x]; }
 		void	index_of_tile( tile * inTile, size_t * outX, size_t * outY );
 		void	neighbors_at( size_t x, size_t y, std::function<void(tile *, neighboring_tile)> visitor);
+		void	neighbors_at_in_radius( size_t x, size_t y, size_t radius, std::function<void(tile *)> visitor);
 		neighboring_tile	seen_neighbor_flags_at( size_t x, size_t y );
 		
 		actor * player()	{ return mPlayer; }

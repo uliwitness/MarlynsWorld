@@ -9,6 +9,7 @@
 #include "marlyn_map.hpp"
 #include <fstream>
 #include <map>
+#include <cmath>
 
 
 using namespace marlyn;
@@ -199,6 +200,30 @@ void	map::neighbors_at( size_t x, size_t y, std::function<void(tile*,neighboring
 	if( x > 0 && y < (mHeight - 1) )
 	{
 		visitor(mTiles[y + 1][x - 1], south_west);
+	}
+}
+
+
+void	map::neighbors_at_in_radius( size_t centerX, size_t centerY, size_t radius, std::function<void(tile *)> visitor)
+{
+	size_t startX = (centerX > radius) ? centerX - radius : 0;
+	size_t startY = (centerY > radius) ? centerY - radius : 0;
+	size_t maxX = std::min(centerX + radius + 1, mWidth);
+	size_t maxY = std::min(centerY + radius + 1, mHeight);
+	
+	for( size_t y = startY; y < maxY; ++y )
+	{
+		for( size_t x = startX; x < maxX; ++x )
+		{
+			double xDistance = std::fabs( double(centerX) - double(x) );
+			double yDistance = std::fabs( double(centerY) - double(y) );
+			double crowFlightDistance = sqrt( xDistance * xDistance + yDistance * yDistance );
+			
+			if( crowFlightDistance <= radius )
+			{
+				visitor(mTiles[y][x]);
+			}
+		}
 	}
 }
 

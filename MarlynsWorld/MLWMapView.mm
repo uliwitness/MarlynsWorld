@@ -102,6 +102,10 @@
 		if( strongSelf )
 		{
 			strongSelf->_playerLayer.frame = (NSRect){ { 48.0 * inActor->x_pos(), 48.0 * (strongSelf->_map->height() -1 -inActor->y_pos()) }, { 48.0, 48.0 } };
+			strongSelf->_map->neighbors_at_in_radius( inActor->x_pos(), inActor->y_pos(), 1, []( marlyn::tile * inTile )
+			{
+				inTile->set_seen( true );
+			});
 			strongSelf->_map->tile_at( inActor->x_pos(), inActor->y_pos() )->set_seen( true );
 		}
 	});
