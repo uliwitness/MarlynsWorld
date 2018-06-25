@@ -704,6 +704,7 @@
                                     </constraints>
                                 </customView>
                             </subviews>
+                            <color key="backgroundColor" white="0.69999999999999996" alpha="1" colorSpace="calibratedWhite"/>
                         </clipView>
                         <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="xjg-4s-tf1">
                             <rect key="frame" x="1" y="343" width="478" height="16"/>

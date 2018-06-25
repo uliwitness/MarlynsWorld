@@ -13,9 +13,14 @@ rightup NE
 rightupdown NES
 1
 marlyn_south 2 2
-5 5
-rightdown	leftright	leftrightdown	leftright 	leftdown
-updown		grass		updown			grass 		updown
-rightupdown	leftright	cross			leftright	leftupdown
-updown		grass		updown			grass 		updown
-rightup		leftright	leftrightup		leftright	leftup
+10 10
+rightdown	leftright	leftrightdown	leftright 	leftdown		rightdown		leftright	leftrightdown	leftright 	leftdown
+updown		grass		updown			grass 		updown			updown			grass		updown			grass 		updown
+rightupdown	leftright	cross			leftright	leftupdown		rightupdown		leftright	cross			leftright	leftupdown
+updown		grass		updown			grass 		updown			updown			grass		updown			grass 		updown
+rightupdown	leftright	leftrightup		leftright	leftup			rightup			leftright	cross			leftright	leftup
+rightupdown	leftright	leftrightdown	leftright 	leftrightdown	leftrightdown	leftright	cross			leftright 	leftdown
+updown		grass		updown			grass 		updown			updown			grass		updown			grass 		updown
+rightupdown	leftright	cross			leftright	leftupdown		rightupdown		leftright	cross			leftright	leftupdown
+updown		grass		updown			grass 		updown			updown			grass		updown			grass 		updown
+rightup		leftright	leftrightup		leftright	leftup			rightup			leftright	leftrightup		leftright	leftup
