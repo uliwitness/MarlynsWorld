@@ -1,26 +1,28 @@
-12
-grass -
-updown NS
-leftright EW
-cross NESW
-leftdown SW
-leftrightdown ESW
-leftrightup NEW
-leftup NW
-leftupdown NSW
-rightdown ES
-rightup NE
-rightupdown NES
-1
+13
+grass - -
+updown NS -
+leftright EW -
+cross NESW -
+leftdown SW -
+leftrightdown ESW -
+leftrightup NEW -
+leftup NW -
+leftupdown NSW -
+rightdown ES -
+rightup NE -
+rightupdown NES -
+crate - X
+2
 marlyn_south 2 2
+badguy_south 1 4
 10 10
 rightdown	leftright	leftrightdown	leftright 	leftdown		rightdown		leftright	leftrightdown	leftright 	leftdown
 updown		grass		updown			grass 		updown			updown			grass		updown			grass 		updown
 rightupdown	leftright	cross			leftright	leftupdown		rightupdown		leftright	cross			leftright	leftupdown
-updown		grass		updown			grass 		updown			updown			grass		updown			grass 		updown
+updown		crate		updown			grass 		updown			updown			grass		updown			grass 		updown
 rightupdown	leftright	leftrightup		leftright	leftup			rightup			leftright	cross			leftright	leftup
 rightupdown	leftright	leftrightdown	leftright 	leftrightdown	leftrightdown	leftright	cross			leftright 	leftdown
 updown		grass		updown			grass 		updown			updown			grass		updown			grass 		updown
 rightupdown	leftright	cross			leftright	leftupdown		rightupdown		leftright	cross			leftright	leftupdown
-updown		grass		updown			grass 		updown			updown			grass		updown			grass 		updown
+updown		grass		updown			grass 		updown			updown			crate		updown			grass 		updown
 rightup		leftright	leftrightup		leftright	leftup			rightup			leftright	leftrightup		leftright	leftup

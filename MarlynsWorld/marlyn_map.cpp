@@ -10,6 +10,7 @@
 #include <fstream>
 #include <map>
 #include <cmath>
+#include <climits>
 
 
 using namespace marlyn;
@@ -33,7 +34,7 @@ void	tile::set_seen( bool isSeen )
 {
 	mIsSeen = isSeen;
 	mParent->tile_changed( this );
-	size_t x, y;
+	size_t x = 0, y = 0;
 	mParent->index_of_tile( this, &x, &y );
 	
 	map * parent = mParent;
@@ -48,56 +49,73 @@ void	tile::set_seen( bool isSeen )
 }
 
 
+struct tile_info
+{
+	neighboring_tile mExits;
+	bool mBlocks;
+};
+
+
 map::map( const char* inFilePath )
 {
 	std::fstream theFile( inFilePath, std::ios_base::in );
 	
-	std::map<std::string, neighboring_tile> tileExits;
-	
+	std::map<std::string, tile_info> tileExits;
+
 	size_t numTileInfos;
 	theFile >> numTileInfos;
 	for( size_t x = 0; x < numTileInfos; ++x )
 	{
 		std::string tilename;
 		std::string tileInfos;
-		
+		std::string tileBlockInfos;
+
 		theFile >> tilename;
 		theFile >> tileInfos;
 		
-		neighboring_tile flags = none;
+		tile_info tileInfo = { none, false };
 		if( tileInfos.find("N") != std::string::npos )
 		{
-			flags |= north;
+			tileInfo.mExits |= north;
 		}
 		if( tileInfos.find("E") != std::string::npos )
 		{
-			flags |= east;
+			tileInfo.mExits |= east;
 		}
 		if( tileInfos.find("S") != std::string::npos )
 		{
-			flags |= south;
+			tileInfo.mExits |= south;
 		}
 		if( tileInfos.find("W") != std::string::npos )
 		{
-			flags |= west;
+			tileInfo.mExits |= west;
 		}
-		tileExits[tilename] = flags;
+
+		theFile >> tileBlockInfos;
+		tileInfo.mBlocks = tileBlockInfos.compare("X") == 0;
+
+		tileExits[tilename] = tileInfo;
 	}
 	
 	size_t numActors;
 	theFile >> numActors;
-	assert(numActors == 1);
 	
-	std::string actorName;
-	theFile >> actorName;
+	for( size_t x = 0; x < numActors; ++x )
+	{
+		std::string actorName;
+		theFile >> actorName;
+		
+		size_t actorX, actorY;
+		theFile >> actorX;
+		theFile >> actorY;
+		
+		actor * newActor = new actor( actorName, this );
+		newActor->set_x_pos(actorX);
+		newActor->set_y_pos(actorY);
+		mActors.push_back( newActor );
+	}
 	
-	size_t actorX, actorY;
-	theFile >> actorX;
-	theFile >> actorY;
-
-	mPlayer = new actor( actorName, this );
-	mPlayer->set_x_pos(actorX);
-	mPlayer->set_y_pos(actorY);
+	mPlayer = mActors.front();
 	
 	theFile >> mWidth;
 	theFile >> mHeight;
@@ -111,7 +129,7 @@ map::map( const char* inFilePath )
 			std::string imageName;
 			theFile >> imageName;
 			
-			tile * newTile = new tile(imageName, tileExits[imageName], this);
+			tile * newTile = new tile(imageName, tileExits[imageName].mExits, tileExits[imageName].mBlocks, this);
 			row.push_back( newTile );
 		}
 		mTiles.push_back(row);
@@ -129,6 +147,11 @@ map::~map()
 		{
 			delete mTiles[y][x];
 		}
+	}
+
+	for( actor * currActor : mActors )
+	{
+		delete currActor;
 	}
 }
 
@@ -294,4 +317,88 @@ void	map::move_actor_in_direction( actor * inActor, neighboring_tile inDirection
 		inActor->set_x_pos( newX );
 		inActor->set_y_pos( newY );
 	}
+}
+
+
+tile *	map::tile_obscuring_view_between_tiles( tile * inCloserTile, tile * inObscuredTile, size_t inMaxDistance )
+{
+	size_t x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+	index_of_tile( inCloserTile, &x1, &y1 );
+	index_of_tile( inObscuredTile, &x2, &y2 );
+	
+	size_t	minX = std::min(x1,x2), minY = std::min(y1,y2),
+			maxX = std::max(x1,x2), maxY = std::max(y1,y2);
+	
+	double xDistance = std::fabs( double(x1) - double(x2) );
+	double yDistance = std::fabs( double(y1) - double(y2) );
+	double maxDistance = std::min( double(inMaxDistance), sqrt( xDistance * xDistance + yDistance * yDistance ) );
+
+	tile * foundTile = NULL;
+	double foundTileDistance = std::numeric_limits<double>::max();
+	
+
+	if( xDistance == 0.0 ) // vertical line.
+	{
+		for( size_t y = minY; y < maxY; ++y )
+		{
+			tile * candidateTile = mTiles[y][x1];
+			if( candidateTile->blocks() )
+			{
+				yDistance = std::fabs( double(y1) - double(y) );
+				
+				if( yDistance < foundTileDistance && yDistance < maxDistance )
+				{
+					foundTile = candidateTile;
+					foundTileDistance = yDistance;
+				}
+			}
+		}
+	}
+	else if( yDistance == 0 ) // horizontal line
+	{
+		for( size_t x = minX; x < maxX; ++x )
+		{
+			tile * candidateTile = mTiles[y1][x];
+			if( candidateTile->blocks() )
+			{
+				xDistance = std::fabs( double(x1) - double(x) );
+				
+				if( xDistance < foundTileDistance && xDistance < maxDistance )
+				{
+					foundTile = candidateTile;
+					foundTileDistance = xDistance;
+				}
+			}
+		}
+	}
+	else
+	{
+		double m = yDistance / xDistance;
+		
+		for( size_t y = minY; y <= maxY; ++y )
+		{
+			for( size_t x = minX; x <= maxX; ++x )
+			{
+				tile * candidateTile = mTiles[y][x];
+				if( candidateTile->blocks() )
+				{
+					double calculatedY = (m * x) - (m * x2) + y1;
+					if( std::abs(calculatedY - y) < 0.001 )
+					{
+						xDistance = std::fabs( double(x1) - double(x) );
+						yDistance = std::fabs( double(y1) - double(y) );
+						double crowFlightDistance = sqrt( xDistance * xDistance + yDistance * yDistance );
+						
+						if( crowFlightDistance < foundTileDistance && crowFlightDistance < maxDistance )
+						{
+							foundTile = candidateTile;
+							foundTileDistance = crowFlightDistance;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return foundTile;
 }

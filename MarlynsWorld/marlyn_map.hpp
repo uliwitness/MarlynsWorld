@@ -40,18 +40,20 @@ namespace marlyn
 	class tile
 	{
 	public:
-		tile( std::string inImageName, neighboring_tile exits, map * inParent ) : mImageName(inImageName), mExits(exits), mParent(inParent) {}
+		tile( std::string inImageName, neighboring_tile exits, bool blocks, map * inParent ) : mImageName(inImageName), mExits(exits), mBlocks(blocks), mParent(inParent) {}
 		
 		std::string image_name() 		{ return mImageName; }
 		neighboring_tile exits() 		{ return mExits; }
 
 		bool is_seen() 					{ return mIsSeen; }
 		void set_seen( bool isSeen );
-		
+		bool blocks() 					{ return mBlocks; }
+
 	protected:
 		std::string			mImageName;
 		bool				mIsSeen = false;
 		neighboring_tile	mExits;
+		bool				mBlocks = false;
 		map				*	mParent;
 	};
 	
@@ -61,18 +63,22 @@ namespace marlyn
 	public:
 		actor( std::string inImageName, map * inParent ) : mImageName(inImageName), mParent(inParent) {}
 		
-		std::string image_name() 		{ return mImageName; }
+		std::string image_name() 					{ return mImageName; }
 
-		size_t		x_pos()	{ return mXPos; }
+		size_t		x_pos()							{ return mXPos; }
 		void		set_x_pos( size_t n );
-		size_t		y_pos()	{ return mYPos; }
+		size_t		y_pos()							{ return mYPos; }
 		void		set_y_pos( size_t n );
+		
+		size_t		sight_radius()					{ return mSightRadius; }
+		void		set_sight_radius( size_t n )	{ mSightRadius = n; }
 
 	protected:
 		std::string			mImageName;
 		size_t  			mXPos = 0;
 		size_t				mYPos = 0;
 		map				*	mParent;
+		size_t				mSightRadius = 2;
 	};
 	
 	
@@ -94,11 +100,36 @@ namespace marlyn
 		actor * player()	{ return mPlayer; }
 		void	move_actor_in_direction( actor * inActor, neighboring_tile inDirection );
 
-		void set_tile_changed_handler( std::function<void(tile *)> inHandler ) { mTileChangedHandler = inHandler; }
-		void tile_changed( tile * inTile ) 		{ if( mTileChangedHandler ) mTileChangedHandler(inTile); };
+		void	set_tile_changed_handler( std::function<void(tile *)> inHandler ) { mTileChangedHandler = inHandler; }
+		void	tile_changed( tile * inTile ) 		{ if( mTileChangedHandler ) mTileChangedHandler(inTile); };
 
-		void set_actor_changed_handler( std::function<void(actor *)> inHandler ) { mActorChangedHandler = inHandler; }
-		void actor_changed( actor * inActor ) 		{ if( mActorChangedHandler ) mActorChangedHandler(inActor); };
+		void	set_actor_changed_handler( std::function<void(actor *)> inHandler ) { mActorChangedHandler = inHandler; }
+		void	actor_changed( actor * inActor ) 	{ if( mActorChangedHandler ) mActorChangedHandler(inActor); };
+
+		tile *	tile_obscuring_view_between_tiles( tile * inTileOne, tile * inTileTwo, size_t maxDistance );
+		
+		size_t	actor_count() 						{ return mActors.size(); }
+		actor *	actor_at_index( size_t inIndex ) 	{ return mActors[inIndex]; }
+		size_t	index_of_actor( actor *inActor )
+		{
+			size_t x = 0;
+			for( actor * currActor : mActors )
+			{
+				if( currActor == inActor )
+				{
+					return x;
+				}
+				++x;
+			}
+			return 0;
+		}
+		void	notify_actors()
+		{
+			for( actor * currActor : mActors )
+			{
+				actor_changed( currActor );
+			}
+		}
 
 	protected:
 		size_t mWidth;
@@ -107,7 +138,8 @@ namespace marlyn
 		std::vector<std::vector<tile *>> mTiles;
 		
 		actor * mPlayer;
-		
+		std::vector<actor *> mActors;
+
 		std::function<void(tile *)> mTileChangedHandler;
 		std::function<void(actor *)> mActorChangedHandler;
 	};
